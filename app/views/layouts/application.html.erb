@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= yield(:head_tags) %>
+    <title>LA Hacks 2019</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= favicon_link_tag %>
+
+    <%= include_gon %>
+    <%= Gon::Base.render_data %>
+    <%= javascript_include_tag 'https://maps.googleapis.com/maps/api/js?key=secrets.MAPS_API_KEY' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class = "row">
+      <div class="col-md-4"></div>
+        <div class="col-md-offset-4 col-md-4">
+          <div class="text-center">
+            <%= link_to image_tag("logo.png", :alt => "Logo", :class => "logo"), root_path %>
+          </div>
+        </div>
+      </div>
+      <h1 class="text-center title">Map Graffiti</h1>
+      <hr />
+      <%= yield %>
+    </div>
+  </body>
+</html>

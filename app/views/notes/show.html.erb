@@ -1,0 +1,33 @@
+<% provide :head_tags do %>
+  <meta name='turbolinks-visit-control' content='reload'>
+  <script>
+    document.addEventListener("DOMContentLoaded", function(){
+      initMap(<%=@note.latitude%>, <%=@note.longitude%>)
+    });
+  </script>
+<% end %>
+
+<p id="notice"><%= notice %></p>
+
+<div class="row text-center font-weight-bold font-italic">
+  <div class="col-md-4"><h3>Message</h3></div>
+  <div class="col-md-4"><h3>Latitude</h3></div>
+  <div class="col-md-4"><h3>Longitude</h3></div>
+</div>
+
+<div class="row text-center border">
+  <div class="col-md-4"><%= @note.message %></div>
+  <div class="col-md-4"><p id = "place_lattitude"><%= @note.latitude %></p></div>
+  <div class="col-md-4"><p id = "place_lattitude"><%= @note.longitude %></p></div>
+</div>
+
+<hr/>
+
+<div id="map"></div>
+<div class="row">
+    
+</div>
+
+<hr/>
+
+<%= button_to "Back", notes_path, method: "get", class: "btn btn-block btn-info" %>

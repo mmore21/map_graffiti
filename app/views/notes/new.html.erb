@@ -1,0 +1,10 @@
+<% provide :head_tags do %>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {initMap2()});
+    </script>
+<% end %>
+
+
+<h1>New Note</h1>
+
+<%= render 'form', note: @note %>

@@ -1,0 +1,42 @@
+<%= form_with(model: note, local: true) do |form| %>
+  <% if note.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(note.errors.count, "error") %> prohibited this note from being saved:</h2>
+
+      <ul>
+      <% note.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field form-group">
+    <%= form.label :message %>
+    <%= form.text_field :message, class: "form-control", required: true %>
+  </div>
+
+  <div class="field form-group">
+    <%= form.label :latitude %>
+    <%= form.text_field :latitude, readonly: true, id: "place_latitude", class: "form-control", required: true %>
+  </div>
+
+  <div class="field form-group">
+    <%= form.label :longitude %>
+    <%= form.text_field :longitude, readonly: true, id: "place_longitude", class: "form-control", required: true %>
+  </div>
+
+  <div class="actions form-group">
+    <%= form.submit "Submit", class: "btn btn-block btn-primary" %>
+  </div>
+
+  <hr/>
+
+  <div class="row">
+    <div id="map2"></div>
+  </div>
+
+  <hr/>
+<% end %>
+
+<%= button_to "Back", notes_path, method: "get", class: "btn btn-block btn-info" %>

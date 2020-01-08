@@ -1,0 +1,49 @@
+<% provide :head_tags do %>
+  <meta name='turbolinks-visit-control' content='reload'>
+  <script>
+    document.addEventListener("DOMContentLoaded", function(){
+      initialize()
+    });
+  </script>
+<% end %>
+
+<p id="notice"><%= notice %></p>
+
+<div class="row" id="map_wrapper">
+    <div id="map_canvas" class="mapping"></div>
+</div>
+
+<hr/>
+
+<div class="row text-center font-weight-bold font-italic">
+  <div class="col-md-4"><h3>Message</h3></div>
+  <div class="col-md-4"><h3>Latitude</h3></div>
+  <div class="col-md-4"><h3>Longitude</h3></div>
+</div>
+
+<div>
+  <% @notes_paginate.each do |note| %>
+  <%= link_to note, action: "go" do %>
+      <div class="row text-center">
+        <div class="col-md-4"><%= note.message %></div>
+        <div class="col-md-4"><%= note.latitude %></div>
+        <div class="col-md-4"><%= note.longitude %></div>
+      </div>
+    <% end %>
+<!--
+      <div class="row text-center border">
+        <div class="col-md-4"><%= link_to 'Show', note %></div>
+        <div class="col-md-4"><%= link_to 'Edit', edit_note_path(note) %></div>
+        <div class="col-md-4"><%= link_to 'Destroy', note, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </div>
+-->
+  <% end %>
+</div>
+
+<div class="row page-selection">
+  <%= will_paginate @notes_paginate, class: "flickr_pagination" %>
+</div>
+
+<hr />
+
+<%= button_to "New Note", new_note_path, method: "get", class: "btn btn-primary index-button" %>
