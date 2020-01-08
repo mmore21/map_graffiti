@@ -1,24 +1,20 @@
-# README
+<p align="center">
+  <img src="https://github.com/mmore21/lahacks2019/blob/master/app/assets/images/logo.png" width="150" />
+</p>
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+<h2 align="center">MapGraffiti</h2>
+<p align="center">
+  LA Hacks 2019 Project.
+</p>
 
-Things you may want to cover:
+### Purpose
 
-* Ruby version
+The entire project was built over a period of 36 hours at UCLA's hackathon, LA Hacks 2019. This project was originally intended as a mobile application, but we were forced to migrate it to a Ruby on Rails web application as the wireless connection at the hackathon was not strong enough for us to download the Android SDK. It primarily uses the following technologies:
 
-* System dependencies
+* Ruby on Rails
+* PostgreSQL
+* Google Maps JavaScript API
 
-* Configuration
+### Devpost
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+The official Devpost submission is viewable [here](https://devpost.com/software/mapgraffiti).
