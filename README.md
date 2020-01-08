@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/mmore21/lahacks2019/blob/master/app/assets/images/logo.png" width="150" />
+  <img src="https://github.com/mmore21/map_graffiti/blob/master/app/assets/images/logo.png" width="150" />
 </p>
 
 <h2 align="center">MapGraffiti</h2>
