@@ -6,7 +6,7 @@ class NotesController < ApplicationController
   def index
     @notes = Note.all
     @notes_paginate = Note.paginate(page: params[:page], per_page: 10)
-    gon.notes = @notes;
+    gon.notes = @notes
   end
 
   # GET /notes/1

@@ -2,7 +2,7 @@
   <meta name='turbolinks-visit-control' content='reload'>
   <script>
     document.addEventListener("DOMContentLoaded", function(){
-      initMap(<%=@note.latitude%>, <%=@note.longitude%>)
+      showMap(<%=@note.latitude%>, <%=@note.longitude%>);
     });
   </script>
 <% end %>

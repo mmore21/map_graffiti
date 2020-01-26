@@ -14,184 +14,117 @@
 //= require activestorage
 //= require turbolinks
 //= require_tree .
-//= require gmaps/google
 //= require jquery3
 //= require popper
 //= require bootstrap
 
-window.latitudeValue = 0;
-window.longitudeValue = 0;
+function indexMap(lat, lng) {
+    var map = new L.Map('map', lat, lng, 6);
 
-function setUserLocation(m, callback) {
-    if (navigator.geolocation) {
-       navigator.geolocation.getCurrentPosition(function(position) {
-            var currLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-          
-            var userMarker = new google.maps.Marker({
-                position: currLocation,
-                map: m
-            });
-            userMarker.setIcon('https://maps.google.com/mapfiles/ms/icons/blue-dot.png');
+    var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    var osmAttrib = 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors';
 
-            userMarker.getPosition().lat();
-            userMarker.getPosition().lng();
+    var osmLayer = new L.TileLayer(osmUrl, {
+        minZoom: 4,
+        maxZoom: 20,
+        attribution: osmAttrib
+    });
 
-            m.setCenter(currLocation);
-       },
-       onGeolocateError,
-       {enableHighAccuracy:true});
-    }
- }
-
-function initialize() {    
-    var map;
-    var bounds = new google.maps.LatLngBounds();
-    var mapOptions = {
-        zoom: 10,
-        mapTypeId: "roadmap"
-    };
-                    
-    // Display a map on the page
-    map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-    map.setTilt(45);
-        
-    // Multiple Markers
-
-    var markers = [];
+    map.setView(new L.LatLng(lat, lng), 6);
+    map.addLayer(osmLayer);
 
     for (var i = 0; i < gon.notes.length; i++)
     {
-        markers.push([gon.notes[i].message, gon.notes[i].latitude, gon.notes[i].longitude])
+        var marker = L.marker([gon.notes[i].latitude, gon.notes[i].longitude]).bindPopup(gon.notes[i].message)
+        marker.addTo(map);
     }
 
-    var infoWindowContent = [];
-
-    for (var i = 0; i < markers.length; i++)
-    {
-        infoWindowContent.push(
-            ['<div class="info_content"><h4>' + markers[i][0] + '</h4></div>']
-        )
-    }
-
-    // Display multiple markers on a map
-    var infoWindow = new google.maps.InfoWindow(), marker, i;
-    
-    // Loop through our array of markers & place each one on the map  
-    for (i = 0; i < markers.length; i++) {
-        var position = new google.maps.LatLng(markers[i][1], markers[i][2]);
-        bounds.extend(position);
-        marker = new google.maps.Marker({
-            position: position,
-            map: map,
-            title: markers[i][0]
-        });
-        
-        // Allow each marker to have an info window    
-        google.maps.event.addListener(marker, 'click', (function(marker, i) {
-            return function() {
-                infoWindow.setContent(infoWindowContent[i][0]);
-                infoWindow.open(map, marker);
-            }
-        })(marker, i));
-
-        // Automatically center the map fitting all markers on the screen
-        map.fitBounds(bounds);
-    }
-
-    // Override our map zoom level once our fitBounds function runs (Make sure it only runs once)
-    var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
-        this.setZoom(10);
-        google.maps.event.removeListener(boundsListener);
-    });
-
-    setUserLocation(map);
+    return map;
 }
 
-function initMap(lat, lng) {
+function showMap(lat, lng) {
+    var map = new L.Map('map', lat, lng, 6);
 
-    var myCoords = new google.maps.LatLng(lat, lng);
+    // Data provider
+    var osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    var osmAttrib = 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors';
 
-    var mapOptions = {
-        center: myCoords,
-        zoom: 10,
-        mapTypeId: "roadmap"
-    };
-
-    var map = new google.maps.Map(document.getElementById('map'), mapOptions);
-    
-    var infowindow = new google.maps.InfoWindow({
-        content: gon.message
+    // Layer
+    var osmLayer = new L.TileLayer(osmUrl, {
+        minZoom: 4,
+        maxZoom: 20,
+        attribution: osmAttrib
     });
 
-    var marker = new google.maps.Marker({
-        position: myCoords,
-        map: map
-    });
+    var marker = L.marker([lat, lng]);
+    if (gon.message)
+    {
+        marker.bindPopup(gon.message);
+    }
+    marker.addTo(map);
 
-    marker.addListener('click', function() {
-        infowindow.open(map, marker);
-    });
+    // Map
+    map.setView(new L.LatLng(lat, lng), 6);
+    map.addLayer(osmLayer);
+
+    return map;
 }
 
 function getLocation() {
     if (window.navigator && window.navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(onGeolocateSuccess, onGeolocateError, {enableHighAccuracy:true});
+        navigator.geolocation.getCurrentPosition(onGeolocateSuccess, onGeolocateError, {enableHighAccuracy: true});
     }
 }
 
-function onIndexGeolocateSuccess(coordinates)
-{
-    const {latitude, longitude} = coordinates.coords;
+function getIndexLocation() {
+    if (window.navigator && window.navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(onIndexGeolocateSuccess, onIndexGeolocateError, {enableHighAccuracy: true});
+    }
 }
 
-function onGeolocateSuccess(coordinates) {
-    const { latitude, longitude } = coordinates.coords;
-    document.getElementById('place_latitude').value = latitude;
-    document.getElementById('place_longitude').value = longitude;
-    map.setCenter(new google.maps.LatLng(latitude, longitude));
+function onIndexGeolocateSuccess(coordinates) {
+    const {latitude, longitude} = coordinates.coords;
+    indexMap(latitude, longitude);
+}
+
+function onIndexGeolocateError(error) {
+    console.warn(error.code, error.message);
+    if (error.code === 1) {
+        console.warn("Error - " + error.message + "\nCode:" + error.code);
+    } else if (error.code === 2) {
+        console.warn("Error - Position unavailable");
+    } else if (error.code === 3) {
+        console.warn("Error - Timeout");
+    }
+    
+    var lat = 0;
+    var lng = 0;
+
+    indexMap(lat, lng);
+}
+
+function onGeolocateSuccess(coordinates)
+{
+    const {latitude, longitude} = coordinates.coords;
+    document.getElementById("place_latitude").value = latitude;
+    document.getElementById("place_longitude").value = longitude;
+    showMap(latitude, longitude);
 }
 
 function onGeolocateError(error) {
     console.warn(error.code, error.message);
     if (error.code === 1) {
-        alert("Error - " + error.message + "\nCode:" + error.code);
+        console.warn("Error - " + error.message + "\nCode:" + error.code);
     } else if (error.code === 2) {
-        alert("Error - Position unavailable");
+        console.warn("Error - Position unavailable");
     } else if (error.code === 3) {
-        alert("Error - Timeout");
-    }
-}
-
-function initMap2() {
-    getLocation();
-
-    var lat = document.getElementById('place_latitude').value;
-    var lng = document.getElementById('place_longitude').value;
-    
-    // if not defined create default position
-    if (!lat || !lng) {
-        lat = 34.0713472;
-        lng = -118.43829760000001;
+        console.warn("Error - Timeout");
     }
 
-    var myCoords = new google.maps.LatLng(lat, lng);
+    var lat = 0;
+    var lng = 0;
 
-    var mapOptions = {
-        center: myCoords,
-        zoom: 10,
-        mapTypeId: "roadmap"
-    };
-
-    var map = new google.maps.Map(document.getElementById('map2'), mapOptions);
-  
-    var marker = new google.maps.Marker({
-        position: myCoords,
-        animation: google.maps.Animation.DROP,
-        map: map,
-        draggable: false
-    });
-
-    marker.addListener('click', function() {
-        infowindow.open(map, marker);
-});
+    document.getElementById("place_latitude").value = lat;
+    document.getElementById("place_longitude").value = lng;
+    showMap(lat, lng);
 }

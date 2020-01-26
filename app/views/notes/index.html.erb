@@ -2,15 +2,15 @@
   <meta name='turbolinks-visit-control' content='reload'>
   <script>
     document.addEventListener("DOMContentLoaded", function(){
-      initialize()
+      getIndexLocation();
     });
   </script>
 <% end %>
 
 <p id="notice"><%= notice %></p>
 
-<div class="row" id="map_wrapper">
-    <div id="map_canvas" class="mapping"></div>
+<div class="row">
+    <div id="map"></div>
 </div>
 
 <hr/>
@@ -30,13 +30,6 @@
         <div class="col-md-4"><%= note.longitude %></div>
       </div>
     <% end %>
-<!--
-      <div class="row text-center border">
-        <div class="col-md-4"><%= link_to 'Show', note %></div>
-        <div class="col-md-4"><%= link_to 'Edit', edit_note_path(note) %></div>
-        <div class="col-md-4"><%= link_to 'Destroy', note, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </div>
--->
   <% end %>
 </div>
 

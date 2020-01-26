@@ -1,7 +1,10 @@
 <% provide :head_tags do %>
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {initMap2()});
-    </script>
+  <meta name='turbolinks-visit-control' content='reload'>
+  <script>
+    document.addEventListener("DOMContentLoaded", function(){
+      getLocation();
+    });
+  </script>
 <% end %>
 
 
